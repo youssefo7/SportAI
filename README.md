@@ -1,6 +1,6 @@
 ### README
 
-## Project: UEFA Euro 2020 Team Performance Visualization
+## Project: UEFA Euro 2020
 
 This project sets up a Flask web application that serves an interactive visualiaztions created using Plotly. UEFA Euro 2020 data.
 
