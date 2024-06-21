@@ -7,7 +7,8 @@ def load_and_preprocess_data(file_path):
     stats_to_extract = [
         'Goals', 'Ball Possession', 'Attempts on target', 'Attempts off target', 'Total Attempts',
         'Attempts against woodwork', 'Attempts Accuracy', 'Passes completed', 
-        'Passes accuracy', 'Goals scored', 'Goals conceded', 'Own-goals', 'Fouls committed'
+        'Passes accuracy', 'Goals scored', 'Goals conceded', 'Own-goals', 'Fouls committed', 'Attempts blocked', 'Tackles', 'Fouls suffered', 'Fouls committed own half', 
+        'Fouls committed opposite half', 'Fouls suffered own half', 'Penalty fouls'
     ]
 
     # Filter 
