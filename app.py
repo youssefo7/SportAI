@@ -2,9 +2,9 @@ from flask import Flask, render_template
 import pandas as pd
 import plotly.express as px
 import plotly.io as pio
+from preprocess import load_and_preprocess_data
 
 app = Flask(__name__)
-
 
 @app.route('/')
 def index():
@@ -50,6 +50,17 @@ def index():
 
     return render_template('index.html', graph_json=graph_json)
 
+
+@app.route('/debug')
+def debug():
+    file_path = './static/EURO_2020_DATA.xlsx'
+    
+    team_stats = load_and_preprocess_data(file_path)
+
+    # Log the DataFrame
+    app.logger.debug(f"\n{team_stats}")
+
+    return "DataFrame has been logged to the console."
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -3,4 +3,6 @@ instance/*
 !instance/.gitignore
 .webassets-cache
 .env
+.venv/
+__pycache__/
 
