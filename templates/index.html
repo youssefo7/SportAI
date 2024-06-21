@@ -19,9 +19,12 @@
 <body>
     <h1 style="text-align: center;">UEFA Euro 2020 Team Performance in 3D</h1>
     <div id="plotly-div"></div>
+    <div id="parallel-plot" class="plot"></div>
     <script type="text/javascript">
         var graph_json = {{ graph_json|safe }};
+        var parallelData = {{ parallel_graph_json|safe }};
         Plotly.newPlot('plotly-div', graph_json.data, graph_json.layout);
+        Plotly.newPlot('parallel-plot', parallelData.data, parallelData.layout);
 
         // Ensure the plot resizes when the window is resized
         window.onresize = function() {

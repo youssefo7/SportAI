@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.io as pio
 from preprocess import load_and_preprocess_data
-
+import plotly.graph_objects as go
 app = Flask(__name__)
 
 @app.route('/')
@@ -27,6 +27,7 @@ def index():
     merged_data = merged_data.merge(shots_data, on=['MatchID', 'TeamName'])
 
     # Create the 3D scatter plot
+    merged_data = merged_data.astype({'Possession': 'int32', 'Shots': 'int32', 'Goals': 'int32'})
     fig = px.scatter_3d(
         merged_data,
         x='Goals',
@@ -37,18 +38,29 @@ def index():
         labels={'Goals': 'Goals Scored', 'Possession': 'Ball Possession (%)', 'Shots': 'Total Shots'}
     )
 
-    fig.update_layout(
-        scene=dict(
-            xaxis=dict(nticks=4, range=[0, merged_data['Goals'].max()], title='Goals'),
-            yaxis=dict(nticks=4, range=[0, 100], title='Possession'),
-            zaxis=dict(nticks=4, range=[0, merged_data['Shots'].max()], title='Shots')
-        )
-    )
-
+    # Create the parallel coordinates plot
+    parallel_fig = go.Figure(data=go.Parcoords(
+    line=dict(color=merged_data['Goals'],  # Color code the lines based on Goals
+              colorscale='Tealrose',  # Color scale for numerical data
+              showscale=True,  # Show color scale legend
+              colorbar=dict(title='Goals'),  # Color bar title
+              cmin=merged_data['Goals'].min(),  # Minimum value of color scale
+              cmax=merged_data['Goals'].max()  # Maximum value of color scale
+             ),
+    dimensions=[
+        dict(range=[merged_data['Possession'].min(), merged_data['Possession'].max()],
+             label='Possession (%)', values=merged_data['Possession']),
+        dict(range=[merged_data['Shots'].min(), merged_data['Shots'].max()],
+             label='Shots', values=merged_data['Shots']),
+        dict(range=[merged_data['Goals'].min(), merged_data['Goals'].max()],
+             label='Goals', values=merged_data['Goals']),
+    ],
+    ))
     # Convert plotly figure to JSON
     graph_json = pio.to_json(fig)
+    parallel_graph_json = pio.to_json(parallel_fig)
 
-    return render_template('index.html', graph_json=graph_json)
+    return render_template('index.html', graph_json=graph_json, parallel_graph_json=parallel_graph_json)
 
 
 @app.route('/debug')
@@ -56,7 +68,6 @@ def debug():
     file_path = './static/EURO_2020_DATA.xlsx'
     
     team_stats = load_and_preprocess_data(file_path)
-
     # Log the DataFrame
     app.logger.debug(f"\n{team_stats}")
 
