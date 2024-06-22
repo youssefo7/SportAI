@@ -2,7 +2,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 def create_offensive_3d_scatter_plot(merged_data):
-    fig = px.scatter_3d(
+     fig = px.scatter_3d(
         merged_data,
         x='Goals',
         y='Ball Possession',
@@ -11,7 +11,7 @@ def create_offensive_3d_scatter_plot(merged_data):
         title='UEFA Euro 2020 Team Offensive Performance in 3D',
         labels={'Goals': 'Goals Scored', 'Ball Possession': 'Ball Possession (%)', 'Total Attempts': 'Total Shots'}
     )
-    return fig
+     return fig
 
 def create_defensive_3d_scatter_plot(merged_data):
     fig = px.scatter_3d(

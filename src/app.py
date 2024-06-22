@@ -43,10 +43,10 @@ def render_content(tab, selected_team):
     print(selected_team)
     if tab == 'tab-1':
         offensive_fig = create_offensive_3d_scatter_plot(team_stats)
-        return dcc.Graph(figure=offensive_fig)
+        return dcc.Graph(figure=offensive_fig, style={'height': '80vh', 'width': '100%'} )
     elif tab == 'tab-2':
         defensive_fig = create_defensive_3d_scatter_plot(team_stats)
-        return dcc.Graph(figure=defensive_fig)
+        return dcc.Graph(figure=defensive_fig, style={'height': '80vh', 'width': '100%'} )
     elif tab == 'tab-3':
         parallel_fig = create_parallel_coordinates_plot(team_stats)
         return dcc.Graph(figure=parallel_fig)
