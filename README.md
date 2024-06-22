@@ -48,7 +48,7 @@ SportsAI/
 
 3. **Install the dependencies:**
    ```bash
-   pip install Flask plotly pandas openpyxl
+   pip install -r requirements.txt
    ```
 
 4. **Run the Flask app:**
