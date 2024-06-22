@@ -27,17 +27,13 @@ def create_defensive_3d_scatter_plot(merged_data):
     return fig
 
 def create_parallel_coordinates_plot(merged_data,selected_team):
-     # Default line color (gray)
-    line_colors = merged_data['Goals']
     
-    # Highlight the selected team in a specific color, if specified
-    if selected_team and selected_team in merged_data['TeamName'].values:
-        line_colors = [ merged_data['Goals'].max() if team == selected_team else merged_data['Goals'].min() for team in merged_data['TeamName']]
+    
+    colors = [ 1 if team == selected_team else 0 for team in merged_data['TeamName']]
+    line_colors=dict(color=colors, colorscale=[[0, 'gray'], [1, 'red']])
     
     parallel_fig = go.Figure(data=go.Parcoords(
-        line=dict(color=line_colors,  
-                  colorscale='Tealrose',  
-                 ),
+        line=line_colors,
         dimensions=[
             dict(range=[merged_data['Ball Possession'].min(), merged_data['Ball Possession'].max()],
                  label='Ball Possession (%)', values=merged_data['Ball Possession']),
