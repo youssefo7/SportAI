@@ -1,43 +1,45 @@
-from flask import Flask, render_template
-import plotly.io as pio
+from flask import Flask
+from dash import Dash
+from dash.dependencies import Input, Output
+from dash import dcc
+from dash import html
+import plotly.express as px
 from preprocess import load_and_preprocess_data
 from graphs import create_offensive_3d_scatter_plot, create_defensive_3d_scatter_plot, create_parallel_coordinates_plot
+import os
 
-app = Flask(__name__)
+server = Flask(__name__)
 
+app = Dash(__name__, server=server, url_base_pathname='/dash/')
 
-@app.route('/')
-def index():
-    # Path to the Excel file
-    file_path = './src/static/EURO_2020_DATA.xlsx'
+file_path = os.path.join(os.path.dirname(__file__), 'static', 'EURO_2020_DATA.xlsx')
 
-    team_stats = load_and_preprocess_data(file_path)
+team_stats = load_and_preprocess_data(file_path)
 
-    # Create the plots
-    team_stats = team_stats.astype({'Ball Possession': 'int32', 'Total Attempts': 'int32', 'Goals': 'int32'})
-    offensive_fig = create_offensive_3d_scatter_plot(team_stats)
-    defensive_fig = create_defensive_3d_scatter_plot(team_stats)
-    parallel_fig = create_parallel_coordinates_plot(team_stats)
+team_stats = team_stats.astype({'Ball Possession': 'int32', 'Total Attempts': 'int32', 'Goals': 'int32'})
+offensive_fig = create_offensive_3d_scatter_plot(team_stats)
+defensive_fig = create_defensive_3d_scatter_plot(team_stats)
+parallel_fig = create_parallel_coordinates_plot(team_stats)
 
-    # Convert plotly figures to JSON
-    offensive_graph_json = pio.to_json(offensive_fig)
-    defensive_graph_json = pio.to_json(defensive_fig)
-    parallel_graph_json = pio.to_json(parallel_fig)
+app.layout = html.Div([
+    html.H1("UEFA Euro 2020 Team Performance in 3D", style={'textAlign': 'center', 'padding': '20px'}),
+    dcc.Tabs(id='tabs-example', value='tab-1', children=[
+        dcc.Tab(label='Offensive Performance', value='tab-1', style={'padding': '10px'}),
+        dcc.Tab(label='Defensive Performance', value='tab-2', style={'padding': '10px'}),
+        dcc.Tab(label='Parallel Coordinates', value='tab-3', style={'padding': '10px'}),
+    ]),
+    html.Div(id='tabs-content-example', style={'padding': '20px'})
+])
 
-    return render_template('index.html', offensive_graph_json=offensive_graph_json,
-                           defensive_graph_json=defensive_graph_json, parallel_graph_json=parallel_graph_json)
-
-
-@app.route('/debug')
-def debug():
-    file_path = './src/static/EURO_2020_DATA.xlsx'
-
-    team_stats = load_and_preprocess_data(file_path)
-    # Log the DataFrame
-    app.logger.debug(f"\n{team_stats}")
-
-    return "DataFrame has been logged to the console."
-
+@app.callback(Output('tabs-content-example', 'children'),
+              Input('tabs-example', 'value'))
+def render_content(tab):
+    if tab == 'tab-1':
+        return dcc.Graph(figure=offensive_fig)
+    elif tab == 'tab-2':
+        return dcc.Graph(figure=defensive_fig)
+    elif tab == 'tab-3':
+        return dcc.Graph(figure=parallel_fig)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run_server(debug=True)
