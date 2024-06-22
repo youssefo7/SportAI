@@ -77,3 +77,21 @@ def create_goal_dist_bar_chart(data, team):
     
      fig = px.bar(plot_df, x='Period', y='Goals', title=f'Goal distribution within a match of {team} during Euro 2020')
      return fig
+
+def create_radar_chart(team_stats, selected_team):
+    stats_to_plot = [
+        'Goals', 'Ball Possession', 'Attempts blocked', 'Goals conceded',
+        'Attempts on target conceded', 'Attempts on target'
+    ]
+
+    team_stats = team_stats[team_stats['TeamName'] == selected_team][stats_to_plot].iloc[0]
+
+    fig = px.line_polar(
+        r=team_stats,
+        theta=stats_to_plot,
+        line_close=True,
+        title=f'{selected_team} Performance Radar Chart'
+    )
+
+    fig.update_traces(fill='toself')
+    return fig
