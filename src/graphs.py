@@ -67,3 +67,56 @@ def create_parallel_coordinates_plot(merged_data,selected_team):
     )
 
     return parallel_fig
+
+def create_goal_dist_bar_chart(data, team):
+     team = str(team).strip()
+     
+     team_data = data.loc[team]
+     plot_df = team_data.reset_index()
+     plot_df.columns = ['Period', 'Goals']
+    
+     fig = px.bar(plot_df, x='Period', y='Goals', title=f'Goal distribution within a match of {team} during Euro 2020')
+     return fig
+
+import plotly.graph_objects as go
+
+def create_radar_chart(team_stats, selected_team, selected_team_to_compare):
+    stats_to_plot = [
+        'Goals', 'Ball Possession', 'Attempts blocked', 'Goals conceded',
+        'Attempts on target conceded', 'Attempts on target'
+    ]
+    radar_chart_title = f'{selected_team} Performance Radar Chart'
+
+    team_stats_selected = team_stats[team_stats['TeamName'] == selected_team][stats_to_plot].iloc[0]
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatterpolar(
+        r=team_stats_selected,
+        theta=stats_to_plot,
+        fill='toself',
+        name=selected_team,
+        line=dict(color='blue')
+    ))
+
+    if selected_team_to_compare:
+        team_stats_compare = team_stats[team_stats['TeamName'] == selected_team_to_compare][stats_to_plot].iloc[0]
+
+        fig.add_trace(go.Scatterpolar(
+            r=team_stats_compare,
+            theta=stats_to_plot,
+            fill='toself',
+            name=selected_team_to_compare,
+            line=dict(color='red')
+        ))
+
+        radar_chart_title = f'{selected_team} vs {selected_team_to_compare} Performance Radar Chart'
+
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+            )),
+        title=radar_chart_title
+    )
+
+    return fig
