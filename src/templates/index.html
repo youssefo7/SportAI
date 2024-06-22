@@ -4,49 +4,10 @@
     <title>UEFA Euro 2020 Team Performance in 3D</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-        .container {
-            display: flex;
-            width: 100%;
-            height: 45vh; /* Adjust height as needed */
-        }
-        .plotly-div {
-            flex: 1;
-            height: 100%;
-        }
-        h1 {
-            text-align: center;
-            width: 100%;
-        }
     </style>
 </head>
 <body>
-    <h1>UEFA Euro 2020 Team Performance in 3D</h1>
-    <div class="container">
-        <div class="plotly-div" id="plotly-div-offensive"></div>
-        <div class="plotly-div" id="plotly-div-defensive"></div>
-    </div>
-    <div id="parallel-plot" class="plot"></div>
     <script type="text/javascript">
-        var offensive_graph_json = {{ offensive_graph_json|safe }};
-        var defensive_graph_json = {{ defensive_graph_json|safe }};
-        var parallelData = {{ parallel_graph_json|safe }};
-
-        Plotly.newPlot('plotly-div-offensive', offensive_graph_json.data, offensive_graph_json.layout);
-        Plotly.newPlot('plotly-div-defensive', defensive_graph_json.data, defensive_graph_json.layout);
-        Plotly.newPlot('parallel-plot', parallelData.data, parallelData.layout);
-
-        // Ensure the plot resizes when the window is resized
-        window.onresize = function() {
-            Plotly.Plots.resize(document.getElementById('plotly-div-offensive'));
-            Plotly.Plots.resize(document.getElementById('plotly-div-defensive'));
-        };
     </script>
 </body>
 </html>
