@@ -11,6 +11,7 @@ def create_offensive_3d_scatter_plot(merged_data):
         title='UEFA Euro 2020 Team Offensive Performance in 3D',
         labels={'Goals': 'Goals Scored', 'Ball Possession': 'Ball Possession (%)', 'Total Attempts': 'Total Shots'}
     )
+
      return fig
 
 def create_defensive_3d_scatter_plot(merged_data):
@@ -25,14 +26,17 @@ def create_defensive_3d_scatter_plot(merged_data):
     )
     return fig
 
-def create_parallel_coordinates_plot(merged_data):
+def create_parallel_coordinates_plot(merged_data,selected_team):
+     # Default line color (gray)
+    line_colors = merged_data['Goals']
+    
+    # Highlight the selected team in a specific color, if specified
+    if selected_team and selected_team in merged_data['TeamName'].values:
+        line_colors = [ merged_data['Goals'].max() if team == selected_team else merged_data['Goals'].min() for team in merged_data['TeamName']]
+    
     parallel_fig = go.Figure(data=go.Parcoords(
-        line=dict(color=merged_data['Goals'],  
+        line=dict(color=line_colors,  
                   colorscale='Tealrose',  
-                  showscale=True,  
-                  colorbar=dict(title='Goals'), 
-                  cmin=merged_data['Goals'].min(), 
-                  cmax=merged_data['Goals'].max()  
                  ),
         dimensions=[
             dict(range=[merged_data['Ball Possession'].min(), merged_data['Ball Possession'].max()],
@@ -52,13 +56,14 @@ def create_parallel_coordinates_plot(merged_data):
             dict(range=[merged_data['Fouls committed'].min(), merged_data['Fouls committed'].max()],
                  label='Fouls Committed', values=merged_data['Fouls committed']),
         ],
+        ids=merged_data.index,
     ))
-
     parallel_fig.update_layout(
         title="UEFA Euro 2020 Team Performance: Parallel Coordinates",
         font=dict(size=12),
         paper_bgcolor='white',
-        plot_bgcolor='white'
+        plot_bgcolor='white',
+        hovermode='closest'
     )
 
     return parallel_fig

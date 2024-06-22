@@ -10,8 +10,13 @@ import os
 
 server = Flask(__name__)
 
-app = Dash(__name__, server=server, url_base_pathname='/dash/')
+app = Dash(__name__, server=server, url_base_pathname='/dash/', suppress_callback_exceptions=True)
 
+with open('templates/index.html', 'r') as file:
+    index_string = file.read()
+
+# Assign index_string to app.index_string
+app.index = index_string
 file_path = os.path.join(os.path.dirname(__file__), 'static', 'EURO_2020_DATA.xlsx')
 
 team_stats = load_and_preprocess_data(file_path)
@@ -31,25 +36,22 @@ app.layout = html.Div([
     dcc.Tabs(id='tabs-example', value='tab-1', children=[
         dcc.Tab(label='Offensive Performance', value='tab-1', style={'padding': '10px'}),
         dcc.Tab(label='Defensive Performance', value='tab-2', style={'padding': '10px'}),
-        dcc.Tab(label='Parallel Coordinates', value='tab-3', style={'padding': '10px'}),
+        dcc.Tab(id='parallel-coordinates',label='Parallel Coordinates', value='tab-3', style={'padding': '10px'}),
     ]),
-    html.Div(id='tabs-content-example', style={'padding': '20px'})
+    dcc.Graph(id='graph-content', style={'height': '80vh', 'width': '100%'}),
+    html.Div(id='hover-data')
 ])
 
-@app.callback(Output('tabs-content-example', 'children'),
+@app.callback(Output('graph-content', 'figure'),
               [Input('tabs-example', 'value'),
                Input('team-dropdown', 'value')])
 def render_content(tab, selected_team):
-    print(selected_team)
     if tab == 'tab-1':
-        offensive_fig = create_offensive_3d_scatter_plot(team_stats)
-        return dcc.Graph(figure=offensive_fig, style={'height': '80vh', 'width': '100%'} )
+        return create_offensive_3d_scatter_plot(team_stats)
     elif tab == 'tab-2':
-        defensive_fig = create_defensive_3d_scatter_plot(team_stats)
-        return dcc.Graph(figure=defensive_fig, style={'height': '80vh', 'width': '100%'} )
+        return create_defensive_3d_scatter_plot(team_stats)
     elif tab == 'tab-3':
-        parallel_fig = create_parallel_coordinates_plot(team_stats)
-        return dcc.Graph(figure=parallel_fig)
-
+        return create_parallel_coordinates_plot(team_stats,selected_team)
+    
 if __name__ == '__main__':
     app.run_server(debug=True)
