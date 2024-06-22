@@ -35,18 +35,18 @@ def get_team_goal_distribution(team_id):
     ot_goals = team_goals[team_goals['Phase'] >= 3].shape[0]
 
     return pd.Series({
-        'FirstHalfGoals': first_half_goals,
-        'SecondHalfGoals': second_half_goals,
-        'OTGoals': ot_goals
+        'First Half': first_half_goals,
+        'Second Half': second_half_goals,
+        'Overtime': ot_goals
     })
 
-def get_goal_distribution_df():
-    match_stats_df = pd.read_excel('./static/EURO_2020_DATA.xlsx', sheet_name='Match Stats')
+def get_goal_distribution_df(file_path):
+    match_stats_df = pd.read_excel(file_path, sheet_name='Match Stats')
     id_name_df = match_stats_df.drop_duplicates(subset=['TeamID', 'TeamName'])[['TeamID', 'TeamName']]
 
     team_ids = match_stats_df['TeamID'].unique()
 
-    goal_distribution_df = pd.DataFrame(index=team_ids, columns=['FirstHalfGoals', 'SecondHalfGoals', 'OTGoals'])
+    goal_distribution_df = pd.DataFrame(index=team_ids, columns=['First Half', 'Second Half', 'Overtime'])
 
     for team_id in team_ids:
         goal_distribution_df.loc[team_id] = get_team_goal_distribution(team_id)
@@ -54,6 +54,6 @@ def get_goal_distribution_df():
     goal_distribution_df = goal_distribution_df.merge(id_name_df, left_index=True, right_on='TeamID')
 
     goal_distribution_df.set_index('TeamName', inplace=True)
-    goal_distribution_df = goal_distribution_df[['FirstHalfGoals', 'SecondHalfGoals', 'OTGoals']]
+    goal_distribution_df = goal_distribution_df[['First Half', 'Second Half', 'Overtime']]
 
-    print(goal_distribution_df)
+    return goal_distribution_df

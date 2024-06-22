@@ -67,3 +67,13 @@ def create_parallel_coordinates_plot(merged_data,selected_team):
     )
 
     return parallel_fig
+
+def create_goal_dist_bar_chart(data, team):
+     team = str(team).strip()
+     
+     team_data = data.loc[team]
+     plot_df = team_data.reset_index()
+     plot_df.columns = ['Period', 'Goals']
+    
+     fig = px.bar(plot_df, x='Period', y='Goals', title=f'Goal distribution within a match of {team} during Euro 2020')
+     return fig
