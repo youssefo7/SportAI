@@ -67,3 +67,21 @@ def create_parallel_coordinates_plot(merged_data,selected_team):
     )
 
     return parallel_fig
+
+def create_radar_chart(team_stats, selected_team):
+    stats_to_plot = [
+        'Goals', 'Ball Possession', 'Attempts blocked', 'Goals conceded',
+        'Attempts on target conceded', 'Attempts on target'
+    ]
+
+    team_stats = team_stats[team_stats['TeamName'] == selected_team][stats_to_plot].iloc[0]
+
+    fig = px.line_polar(
+        r=team_stats,
+        theta=stats_to_plot,
+        line_close=True,
+        title=f'{selected_team} Performance Radar Chart'
+    )
+
+    fig.update_traces(fill='toself')
+    return fig

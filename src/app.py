@@ -5,7 +5,8 @@ from dash import dcc
 from dash import html
 import plotly.express as px
 from preprocess import load_and_preprocess_data
-from graphs import create_offensive_3d_scatter_plot, create_defensive_3d_scatter_plot, create_parallel_coordinates_plot
+from graphs import create_offensive_3d_scatter_plot, create_defensive_3d_scatter_plot, create_parallel_coordinates_plot, \
+    create_radar_chart
 import os
 
 server = Flask(__name__)
@@ -28,7 +29,7 @@ app.layout = html.Div([
         dcc.Dropdown(
             id='team-dropdown',
             options=[{'label': team, 'value': team} for team in team_stats['TeamName'].unique()],
-            value='',
+            value='Italy',
             style={'width': '95%'}
         ),
     ], style={'display': 'flex', 'padding': '10px'}),
@@ -37,6 +38,7 @@ app.layout = html.Div([
         dcc.Tab(label='Offensive Performance', value='tab-1', style={'padding': '10px'}),
         dcc.Tab(label='Defensive Performance', value='tab-2', style={'padding': '10px'}),
         dcc.Tab(id='parallel-coordinates',label='Parallel Coordinates', value='tab-3', style={'padding': '10px'}),
+        dcc.Tab(label='Radar Chart', value='tab-4', style={'padding': '10px'}),
     ]),
     dcc.Graph(id='graph-content', style={'height': '80vh', 'width': '100%'}),
     html.Div(id='hover-data')
@@ -51,7 +53,9 @@ def render_content(tab, selected_team):
     elif tab == 'tab-2':
         return create_defensive_3d_scatter_plot(team_stats)
     elif tab == 'tab-3':
-        return create_parallel_coordinates_plot(team_stats,selected_team)
-    
+        return create_parallel_coordinates_plot(team_stats, selected_team)
+    elif tab == 'tab-4':
+        return create_radar_chart(team_stats, selected_team)
+
 if __name__ == '__main__':
     app.run_server(debug=True)

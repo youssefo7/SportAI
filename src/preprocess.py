@@ -1,21 +1,49 @@
 import pandas as pd
 
+
 def load_and_preprocess_data(file_path):
     match_stats = pd.read_excel(file_path, sheet_name='Match Stats')
 
-    stats_to_extract = [
-        'Goals', 'Ball Possession', 'Attempts on target', 'Total Attempts',
-        'Passes completed', 'Passes accuracy', 'Goals conceded', 'Fouls committed', 'Tackles', 'Saves'
+    stats_to_sum = [
+        'Goals', 'Attempts on target', 'Total Attempts', 'Attempts blocked',
+        'Passes completed', 'Goals conceded', 'Fouls committed', 'Tackles', 'Saves'
     ]
+    stats_to_average = ['Ball Possession', 'Passes accuracy']
 
-    filtered_stats = match_stats[match_stats['StatsName'].isin(stats_to_extract)]
+    sum_stats = match_stats[match_stats['StatsName'].isin(stats_to_sum)]
+    avg_stats = match_stats[match_stats['StatsName'].isin(stats_to_average)]
 
-    pivot_df = filtered_stats.pivot_table(
+    pivot_sum_df = sum_stats.pivot_table(
         index=['TeamID', 'TeamName'],
         columns='StatsName',
         values='Value',
         aggfunc='sum'
     ).reset_index()
+
+    pivot_avg_df = avg_stats.pivot_table(
+        index=['TeamID', 'TeamName'],
+        columns='StatsName',
+        values='Value',
+        aggfunc='mean'
+    ).reset_index()
+
+    pivot_df = pd.merge(pivot_sum_df, pivot_avg_df, on=['TeamID', 'TeamName'], how='left')
+
+    attempts_on_target = match_stats[match_stats['StatsName'] == 'Attempts on target']
+
+    attempts_conceded = attempts_on_target.copy()
+    attempts_conceded['OpponentTeamID'] = attempts_conceded.apply(
+        lambda row: match_stats[(match_stats['MatchID'] == row['MatchID']) & (match_stats['TeamID'] != row['TeamID'])]['TeamID'].values[0],
+        axis=1
+    )
+    attempts_conceded['OpponentTeamName'] = attempts_conceded.apply(
+        lambda row: match_stats[(match_stats['MatchID'] == row['MatchID']) & (match_stats['TeamID'] != row['TeamID'])]['TeamName'].values[0],
+        axis=1
+    )
+    attempts_conceded_grouped = attempts_conceded.groupby(['TeamID', 'TeamName']).agg({'Value': 'sum'}).reset_index()
+    attempts_conceded_grouped = attempts_conceded_grouped.rename(columns={'Value': 'Attempts on target conceded'})
+
+    pivot_df = pivot_df.merge(attempts_conceded_grouped, on=['TeamID', 'TeamName'], how='left')
 
     pivot_df.columns.name = None
     pivot_df = pivot_df.rename_axis(None, axis=1)
