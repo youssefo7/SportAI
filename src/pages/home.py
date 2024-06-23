@@ -114,8 +114,8 @@ def render_intro(intro):
           [Input('desc-teamselect', 'children')])
 def render_teamselect_desc(intro):
     intro = "Before getting into the visualizations, please choose a team that you want to focus on. " \
-    "The selected team will be the main focus the four visualizations, and each one of them will offer " \
-    "insights and perpectives into this particular team performance. For the comparative analysis section, this team will be highlighted " \
+    "The selected team will be the main focus of the four visualizations, and each one of them will offer " \
+    "insights and perpectives into this particular team's performance. For the comparative analysis section, this team will be highlighted " \
     "in red, while the other compared teams will be black."
     return intro
 
@@ -136,10 +136,11 @@ def render_3d_desc(intro):
 def render_parallel_desc(intro):
     intro = "This visualization focuses on the identification of patterns and correlations between different " \
     "performance metrics, which are distributed on the axes. The metrics displayed are both offensive and defensive statistics. The offensive " \
-    "statitics are the average value per game of the number of goals scored, the number of shots taken, the ball " \
+    "statistics are the average value per game of the number of goals scored, the number of shots taken, the ball " \
     "possession percentage, the number of passes completed and the pass accuracy. The defensive statistics are the " \
     "average value per game of the number of tackles, the number of blocked shots and the number of fouls committed. " \
-    "For each axis, a range of values can be selected to highlight teams that perform within that range."
+    "For each axis, a range of values can be selected to highlight teams that perform within that range. Select a " \
+    "range on many axes to capture a group of teams that adhere to a particular pattern."
     return intro
 
 
@@ -150,7 +151,7 @@ def render_radar_desc(intro):
     "of the selected team. For the offensive performance, the visualization displays the average value per game " \
     "of the number of goals scored, the number of shots on target taken and the ball possession percentage. " \
     "For the defensive performance, the visualization displays the average value per game of the number of " \
-    "the number of goals conceded, the number of blocked shots and the number of shots on target conceded. " \
+    "of goals conceded, the number of blocked shots and the number of shots on target conceded. " \
     "By hovering on a particular point, you can obtain the precise value of the metric. " \
     "Optionally, the selected team can be compared with another one by using the dropdown menu below. "
     return intro
