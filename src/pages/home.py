@@ -4,14 +4,18 @@ from services.preprocess import Preprocessor
 
 register_page(__name__, "/")
 
+# Initialize the Preprocessor singleton instance for data preprocessing
 preprocessor = Preprocessor()
 
+# Fetch processed team statistics and goal distribution data
 team_stats = preprocessor.get_processed_data()
 goal_dist = preprocessor.get_goal_distribution_df()
 
 layout = html.Div([
+    # Introduction section
     html.Div(id='intro', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     
+    # Team selection dropdown
     html.H2('Team selection', style={'textAlign': 'justify', 'margin-bottom': '2%', 'font-size': '1.7em'}),
     html.Div(id='desc-teamselect', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     dcc.Dropdown(
@@ -23,8 +27,10 @@ layout = html.Div([
         clearable=False
     ),
     
+    # Comparative Analysis section
     html.H2('Comparative Analysis', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.7em'}),
 
+    # 3D Scatter Plot section
     html.H3('3D Scatter Plot for Offensive and Defensive Metrics', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.4em'}), 
     html.Div(id='desc-3d', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     dcc.Tabs(id='tabs-example', value='tab-1', children=[
@@ -33,12 +39,15 @@ layout = html.Div([
     ]),
     dcc.Graph(id='graph-content', style={'height': '80vh', 'width': '100%'}),
 
+    # Parallel Coordinates Chart section
     html.H3('Parallel Coordinates Chart for Detailed Metric Comparison', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.4em'}), 
     html.Div(id='desc-parallel', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     dcc.Graph(id='parallel_coordinates_plot', style={'height': '80vh', 'width': '100%'}),
     
+    # Team-Specific Performance section
     html.H2('Team-Specific Performance', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.7em'}),
 
+     # Radar Chart section
     html.H3('Radar Chart for Offensive and Defensive Comparison', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.4em'}),
     html.Div(id='desc-radar', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     html.Div([
@@ -51,6 +60,7 @@ layout = html.Div([
         dcc.Graph(id='radar-chart', style={'height': '80vh', 'width': '100%'})
     ], style={'padding': '10px'}),
     
+    # Goal Distribution Bar Chart section
     html.H3('Bar Chart Of Goal Distribution Throughout A Match', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.4em'}),
     html.Div(id='desc-bar', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     dcc.Graph(id='goal_dist_bar_chart', style={'height': '80vh', 'width': '100%'}),

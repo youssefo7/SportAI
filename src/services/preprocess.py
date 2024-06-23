@@ -24,6 +24,15 @@ class Preprocessor:
         return self._goal_distribution_df.copy()
     
     def _load_and_preprocess_data(self,file_path):
+        """
+        Loads and preprocesses match statistics data from the given Excel file path.
+
+        Args:
+        file_path (str): Path to the Excel file containing match statistics.
+
+        Returns:
+        pandas.DataFrame: Preprocessed DataFrame with aggregated and calculated statistics.
+        """
         match_stats = pd.read_excel(file_path, sheet_name='Match Stats')
 
         stats_to_sum = [
@@ -73,6 +82,15 @@ class Preprocessor:
         return pivot_df
 
     def _get_team_goal_distribution(self,team_id):
+        """
+        Calculates goal distribution (first half, second half, overtime) for a specific team.
+
+        Args:
+        team_id (int): ID of the team.
+
+        Returns:
+        pandas.Series: Series containing goal distribution metrics.
+        """
         match_events_df = pd.read_excel('./static/EURO_2020_DATA.xlsx', sheet_name='Match events')
 
         team_goals = match_events_df[((match_events_df['TeamFromID'] == team_id) & 
@@ -91,6 +109,15 @@ class Preprocessor:
         })
 
     def _get_goal_distribution_df(self,file_path):
+        """
+        Retrieves goal distribution data (first half, second half, overtime) for all teams.
+
+        Args:
+        file_path (str): Path to the Excel file containing match statistics.
+
+        Returns:
+        pandas.DataFrame: DataFrame with goal distribution metrics for each team.
+        """
         match_stats_df = pd.read_excel(file_path, sheet_name='Match Stats')
         id_name_df = match_stats_df.drop_duplicates(subset=['TeamID', 'TeamName'])[['TeamID', 'TeamName']]
 

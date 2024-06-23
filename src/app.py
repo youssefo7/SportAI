@@ -9,6 +9,7 @@ server = Flask(__name__)
 
 file_path = os.path.join(os.path.dirname(__file__), 'static', 'EURO_2020_DATA.xlsx')
 
+# Initialize Preprocessor singleton instance with the specified data file path
 preprocessor = Preprocessor(file_path)
 
 app = Dash(__name__, use_pages=True ,server=server, url_base_pathname='/',external_stylesheets=[
@@ -18,7 +19,7 @@ app = Dash(__name__, use_pages=True ,server=server, url_base_pathname='/',extern
 
 app.layout = html.Div([
     html.H1("UEFA Euro 2020 Team Performance", style={'textAlign': 'center', 'padding': '20px'}),
-    page_container
+    page_container # Placeholder for page content
 ])
     
 if __name__ == '__main__':
