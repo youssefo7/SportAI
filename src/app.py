@@ -12,7 +12,7 @@ file_path = os.path.join(os.path.dirname(__file__), 'static', 'EURO_2020_DATA.xl
 # Initialize Preprocessor singleton instance with the specified data file path
 preprocessor = Preprocessor(file_path)
 
-app = Dash(__name__, use_pages=True ,server=server, url_base_pathname='/',external_stylesheets=[
+app = Dash(__name__, use_pages=True, server=server, url_base_pathname='/', external_stylesheets=[
         dbc.themes.BOOTSTRAP,
         'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css'  # Include Font Awesome
     ], )
