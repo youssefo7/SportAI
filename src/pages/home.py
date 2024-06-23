@@ -19,7 +19,9 @@ layout = html.Div([
         id='team-dropdown',
         options=[{'label': team, 'value': team} for team in team_stats['TeamName'].unique()],
         value='Italy',
-        style={'width': "100%", 'margin-bottom': '3%'}
+        style={'width': "100%", 'margin-bottom': '3%'},
+        searchable=False,
+        clearable=False
     ),
     
     html.H2('Comparative Analysis', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.7em'}),
