@@ -4,22 +4,6 @@
 
 This project sets up a Flask web application that serves an interactive visualiaztions created using Plotly. UEFA Euro 2020 data.
 
-### Prerequisites
-
-Make sure you have the following installed with pyhotn3.8:
-
-- Python 3.x
-- Flask
-- Plotly
-- Pandas
-- Openpyxl
-
-You can install the required Python packages using pip:
-
-```bash
-pip install Flask plotly pandas openpyxl
-```
-
 ### Project Structure
 
 ```
