@@ -73,7 +73,6 @@ def render_parallel_coordinates_plot(selected_team):
 @callback(Output('radar-chart', 'figure'),
         [Input('team-dropdown', 'value'), Input('team-dropdown-compare', 'value')])
 def render_radar_chart(selected_team, selected_team_to_compare):
-    print(f'selected team: {selected_team}')
     return create_radar_chart(team_stats, selected_team, selected_team_to_compare)
 
 @callback(Output('goal_dist_bar_chart', 'figure'),
