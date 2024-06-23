@@ -153,7 +153,11 @@ def render_radar_desc(intro):
     "of the number of goals scored, the number of shots on target taken and the ball possession percentage. " \
     "For the defensive performance, the visualization displays the average value per game of the number of " \
     "of goals conceded, the number of blocked shots and the number of shots on target conceded. " \
-    "By hovering on a particular point, you can obtain the precise value of the metric. " \
+    "For each of these metrics, we display their normalized value so that we can compare the performance of a team " \
+    "between different metrics. The value of all the metrics are therefore between 0 and 1, where 0 is the minimal " \
+    "value across all teams, and 1 the maximal value across all teams. With the offensive metrics on the top half  " \
+    "and the defensive metrics on the bottom half, you can easily compare the performance of a team with respect to those " \
+    "aspects of the game. By hovering on a particular point, you can obtain the precise value of the metric. " \
     "Optionally, the selected team can be compared with another one by using the dropdown menu below. "
     return intro
 
