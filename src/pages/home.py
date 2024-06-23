@@ -13,7 +13,7 @@ goal_dist = preprocessor.get_goal_distribution_df()
 layout = html.Div([
     html.Div(id='intro', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     
-    html.H2('Team selection', style={'textAlign': 'justify', 'margin-bottom': '3%'}),
+    html.H2('Team selection', style={'textAlign': 'justify', 'margin-bottom': '2%', 'font-size': '1.7em'}),
     html.Div(id='desc-teamselect', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     dcc.Dropdown(
         id='team-dropdown',
@@ -22,7 +22,9 @@ layout = html.Div([
         style={'width': "100%", 'margin-bottom': '3%'}
     ),
     
-    html.H2('3D Scatter Plot for Offensive and Defensive Metrics', style={'textAlign': 'justify', 'margin-bottom': '3%'}), 
+    html.H2('Comparative Analysis', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.7em'}),
+
+    html.H3('3D Scatter Plot for Offensive and Defensive Metrics', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.4em'}), 
     html.Div(id='desc-3d', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     dcc.Tabs(id='tabs-example', value='tab-1', children=[
         dcc.Tab(label='Offensive Performance', value='tab-1', style={'padding': '10px'}),
@@ -30,11 +32,13 @@ layout = html.Div([
     ]),
     dcc.Graph(id='graph-content', style={'height': '80vh', 'width': '100%'}),
 
-    html.H2('Parallel Coordinates Chart for Detailed Metric Comparison', style={'textAlign': 'justify', 'margin-bottom': '3%'}), 
+    html.H3('Parallel Coordinates Chart for Detailed Metric Comparison', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.4em'}), 
     html.Div(id='desc-parallel', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     dcc.Graph(id='parallel_coordinates_plot', style={'height': '80vh', 'width': '100%'}),
     
-    html.H2('Radar Chart for Offensive and Defensive Comparison', style={'textAlign': 'justify', 'margin-bottom': '3%'}),
+    html.H2('Team-Specific Performance', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.7em'}),
+
+    html.H3('Radar Chart for Offensive and Defensive Comparison', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.4em'}),
     html.Div(id='desc-radar', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     html.Div([
         dcc.Dropdown(
@@ -46,7 +50,7 @@ layout = html.Div([
         dcc.Graph(id='radar-chart', style={'height': '80vh', 'width': '100%'})
     ], style={'padding': '10px'}),
     
-    html.H2('Bar Chart Of Goal Distribution Throughout A Match', style={'textAlign': 'justify', 'margin-bottom': '3%'}),
+    html.H3('Bar Chart Of Goal Distribution Throughout A Match', style={'textAlign': 'justify', 'margin-bottom': '3%', 'font-size': '1.4em'}),
     html.Div(id='desc-bar', style={'textAlign': 'justify', 'margin-left': '10%', 'margin-right': '10%', 'margin-bottom': '3%', 'font-size': '1.2em'}), 
     dcc.Graph(id='goal_dist_bar_chart', style={'height': '80vh', 'width': '100%'}),
 ], style={'textAlign': 'center', 'margin-left': '15%', 'margin-right': '15%'})
@@ -86,7 +90,7 @@ def render_intro(intro):
     "performance of teams on several different aspects of the game. To do that, we're using a dataset provided " \
     "by Sports AI, which contains a lot of metrics that were recorded during each match of the tournament. " \
     "As a main theme, our project is divided in two sections: a Comparative Analysis section and a Team-Specific " \
-    "Performance section. The comparative analysis section contains two visualizations of which the main goal is to display " \
+    "Performance section. The Comparative Analysis section contains two visualizations of which the main goal is to display " \
     "how the selected team compares to the other teams.  The Team-Specific Performance section contains two visualizations of " \
     "which the main goal is to display performance metrics of the selected team."
     return intro
@@ -96,14 +100,14 @@ def render_intro(intro):
 def render_teamselect_desc(intro):
     intro = "Before getting into the visualizations, please choose a team that you want to focus on. " \
     "The selected team will be the main focus the four visualizations, and each one of them will offer " \
-    "insights and perpectives into this particular team performance. For the comparaison section, this team will be highlighted " \
+    "insights and perpectives into this particular team performance. For the comparative analysis section, this team will be highlighted " \
     "in red, while the other compared teams will be black."
     return intro
 
 @callback(Output('desc-3d', 'children'),
           [Input('desc-3d', 'children')])
 def render_3d_desc(intro):
-    intro = "This visualization is seperated in two parts: offensive performance and defensive performance. " \
+    intro = "This visualization is separated in two parts: offensive performance and defensive performance. " \
     "For the offensive performance, the visualization displays the average value per game of the number of goals scored, " \
     "ball possession percentage, and the number of shots on target taken. For the defensive performance, the " \
     "visualization displays the average value per game of the number of fouls committed and the number of tackles. " \
@@ -132,8 +136,8 @@ def render_radar_desc(intro):
     "of the number of goals scored, the number of shots on target taken and the ball possession percentage. " \
     "For the defensive performance, the visualization displays the average value per game of the number of " \
     "the number of goals conceded, the number of blocked shots and the number of shots on target conceded. " \
-    "By hovering on a particular point, you can obtain the precise value of the metric." \
-    "Optionnally, the selected team can be compared with another one by using the dropdown menu below. "
+    "By hovering on a particular point, you can obtain the precise value of the metric. " \
+    "Optionally, the selected team can be compared with another one by using the dropdown menu below. "
     return intro
 
 @callback(Output('desc-bar', 'children'),
@@ -143,10 +147,4 @@ def render_bar_desc(intro):
     "For the selected team, the bar plot displays the number of goals scored in the first half, the second half" \
     "and in overtime. Hovering on a bar displays the exact number of goals scored by the team in the given half" 
     return intro
-
-# @callback(
-#     Input('team-dropdown', 'value')
-# )
-# def update_button_state(selected_team):
-#     state_manager.setAttr('selected_team', selected_team)
     
