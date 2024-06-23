@@ -4,7 +4,7 @@ from services.preprocess import Preprocessor
 
 register_page(__name__, "/")
 
-# Initialize the Preprocessor singleton instance for data preprocessing
+# Initialize the Preprocessor singleton instance  
 preprocessor = Preprocessor()
 
 # Fetch processed team statistics, goal distribution data and normalized metrics for radar chart
@@ -72,9 +72,9 @@ layout = html.Div([
                Input('team-dropdown', 'value')])
 def render_3d_scatter_plot(tab, selected_team):
     if tab == 'tab-1':
-        return create_offensive_3d_scatter_plot(team_stats)
+        return create_offensive_3d_scatter_plot(team_stats,selected_team)
     elif tab == 'tab-2':
-        return create_defensive_3d_scatter_plot(team_stats)
+        return create_defensive_3d_scatter_plot(team_stats,selected_team)
     
 @callback(Output('parallel_coordinates_plot', 'figure'),
               [Input('team-dropdown', 'value')])
