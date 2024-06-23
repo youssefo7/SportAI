@@ -45,6 +45,7 @@ layout = html.Div([
             id='team-dropdown-compare',
             options=[{'label': team, 'value': team} for team in team_stats['TeamName'].unique()],
             value='',
+            placeholder='Select a team to compare (optional)',
             style={'width': '100%'}
         ),
         dcc.Graph(id='radar-chart', style={'height': '80vh', 'width': '100%'})
@@ -143,7 +144,7 @@ def render_radar_desc(intro):
 @callback(Output('desc-bar', 'children'),
           [Input('desc-bar', 'children')])
 def render_bar_desc(intro):
-    intro = "This final visualization focuses on a single question to answer: How are goals distributed throughout the game?" \
+    intro = "This final visualization focuses on a single question to answer: How are goals distributed throughout the game? " \
     "For the selected team, the bar plot displays the number of goals scored in the first half, the second half" \
     "and in overtime. Hovering on a bar displays the exact number of goals scored by the team in the given half" 
     return intro
