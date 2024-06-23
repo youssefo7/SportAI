@@ -117,7 +117,7 @@ def render_teamselect_desc(intro):
     intro = "Before getting into the visualizations, please choose a team that you want to focus on. " \
     "The selected team will be the main focus of the four visualizations, and each one of them will offer " \
     "insights and perpectives into this particular team's performance. For the comparative analysis section, this team will be highlighted " \
-    "in red, while the other compared teams will be black."
+    "in red, while the other compared teams will be greyed out."
     return intro
 
 @callback(Output('desc-3d', 'children'),
@@ -165,7 +165,7 @@ def render_radar_desc(intro):
           [Input('desc-bar', 'children')])
 def render_bar_desc(intro):
     intro = "This final visualization focuses on a single question to answer: How are goals distributed throughout the game? " \
-    "For the selected team, the bar plot displays the number of goals scored in the first half, the second half" \
+    "For the selected team, the bar plot displays the number of goals scored in the first half, the second half " \
     "and in overtime. Hovering on a bar displays the exact number of goals scored by the team in the given half" 
     return intro
     

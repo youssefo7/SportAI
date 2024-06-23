@@ -38,30 +38,19 @@ class Preprocessor:
         """
         match_stats = pd.read_excel(file_path, sheet_name='Match Stats')
 
-        stats_to_sum = [
+        stats_to_average = [
             'Goals', 'Attempts on target', 'Total Attempts', 'Attempts blocked',
-            'Passes completed', 'Goals conceded', 'Fouls committed', 'Tackles', 'Saves'
+            'Passes completed', 'Goals conceded', 'Fouls committed', 'Tackles', 'Saves',
+            'Ball Possession', 'Passes accuracy'
         ]
-        stats_to_average = ['Ball Possession', 'Passes accuracy']
-
-        sum_stats = match_stats[match_stats['StatsName'].isin(stats_to_sum)]
         avg_stats = match_stats[match_stats['StatsName'].isin(stats_to_average)]
 
-        pivot_sum_df = sum_stats.pivot_table(
-            index=['TeamID', 'TeamName'],
-            columns='StatsName',
-            values='Value',
-            aggfunc='sum'
-        ).reset_index()
-
-        pivot_avg_df = avg_stats.pivot_table(
+        pivot_df = avg_stats.pivot_table(
             index=['TeamID', 'TeamName'],
             columns='StatsName',
             values='Value',
             aggfunc='mean'
         ).reset_index()
-
-        pivot_df = pd.merge(pivot_sum_df, pivot_avg_df, on=['TeamID', 'TeamName'], how='left')
 
         attempts_on_target = match_stats[match_stats['StatsName'] == 'Attempts on target']
 
