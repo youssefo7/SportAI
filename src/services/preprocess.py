@@ -23,6 +23,9 @@ class Preprocessor:
     def get_goal_distribution_df(self):
         return self._goal_distribution_df.copy()
     
+    def get_normalized_radar_data(self, df):
+        return self._get_normalized_radar_data(df).copy()
+    
     def _load_and_preprocess_data(self,file_path):
         """
         Loads and preprocesses match statistics data from the given Excel file path.
@@ -80,6 +83,51 @@ class Preprocessor:
         pivot_df = pivot_df.rename_axis(None, axis=1)
 
         return pivot_df
+
+    def _get_normalized_radar_data(self, df):
+        """
+        Preprocesses match statistics dataframe to normalize radar chart metrics.
+
+        Args:
+        df (pandas.DataFrame): Preprocessed DataFrame with aggregated and calculated statistics.
+
+        Returns:
+        pandas.DataFrame: Preprocessed DataFrame with normalized data for radar chart metrics.
+        """
+        stats_for_radar = [
+            'Goals', 'Ball Possession', 'Attempts blocked', 'Goals conceded',
+            'Attempts on target conceded', 'Attempts on target'
+        ]
+
+        less_is_better = ['Goals conceded', 'Attempts on target conceded']
+        normalized_team_stats = self._normalize_metrics(df, stats_for_radar, less_is_better)
+
+        return normalized_team_stats
+
+    def _normalize_metrics(self, df, metrics, less_is_better):
+        """
+        Normalizes radar chart metrics.
+
+        Args:
+        df (pandas.DataFrame): Preprocessed DataFrame with aggregated and calculated statistics.
+        metrics (list): List of metrics to normalize.
+        less_is_better (list): List of metrics for which lesser values are better
+
+        Returns:
+        pandas.DataFrame: Preprocessed DataFrame with normalized data for radar chart metrics.
+        """
+        normalized_df = df.copy()
+        
+        for metric in metrics:
+            min = df[metric].min()
+            max = df[metric].max()
+            
+            if metric in less_is_better:
+                normalized_df[f"{metric}_norm"] = 1 - ((df[metric] - min) / (max - min))
+            else:
+                normalized_df[f"{metric}_norm"] = (df[metric] - min) / (max - min)
+        
+        return normalized_df
 
     def _get_team_goal_distribution(self,team_id):
         """

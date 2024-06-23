@@ -129,28 +129,42 @@ def create_radar_chart(team_stats, selected_team, selected_team_to_compare):
         'Goals', 'Ball Possession', 'Attempts blocked', 'Goals conceded',
         'Attempts on target conceded', 'Attempts on target'
     ]
+
     radar_chart_title = f'{selected_team} Performance Radar Chart'
 
-    team_stats_selected = team_stats[team_stats['TeamName'] == selected_team][stats_to_plot].iloc[0]
+    team_stats_selected = team_stats[team_stats['TeamName'] == selected_team].iloc[0]
+    norm_data = [team_stats_selected[f"{stat}_norm"] for stat in stats_to_plot]
+    actual_data = [team_stats_selected[stat] for stat in stats_to_plot]
+
     fig = go.Figure()
 
     fig.add_trace(go.Scatterpolar(
-        r=team_stats_selected,
+        r=norm_data,
         theta=stats_to_plot,
         fill='toself',
         name=selected_team,
-        line=dict(color='blue')
+        line=dict(color='blue'),
+        hovertemplate='<b>%{theta}</b><br>' +
+                'Normalized value: %{r:.2f}<br>' +
+                'Actual value: %{customdata:.2f}<extra></extra>',
+        customdata=actual_data
     ))
 
     if selected_team_to_compare:
-        team_stats_compare = team_stats[team_stats['TeamName'] == selected_team_to_compare][stats_to_plot].iloc[0]
+        team_stats_compare = team_stats[team_stats['TeamName'] == selected_team_to_compare].iloc[0]
+        norm_data_compare = [team_stats_compare[f"{stat}_norm"] for stat in stats_to_plot]
+        original_data_compare = [team_stats_compare[stat] for stat in stats_to_plot]
 
         fig.add_trace(go.Scatterpolar(
-            r=team_stats_compare,
+            r=norm_data_compare,
             theta=stats_to_plot,
             fill='toself',
             name=selected_team_to_compare,
-            line=dict(color='red')
+            line=dict(color='red'),
+            hovertemplate='<b>%{theta}</b><br>' +
+                'Normalized value: %{r:.2f}<br>' +
+                'Actual value: %{customdata:.2f}<extra></extra>',
+            customdata=original_data_compare
         ))
 
         radar_chart_title = f'{selected_team} vs {selected_team_to_compare} Performance Radar Chart'
@@ -159,7 +173,13 @@ def create_radar_chart(team_stats, selected_team, selected_team_to_compare):
         polar=dict(
             radialaxis=dict(
                 visible=True,
-            )),
+                range=[0, 1]
+            ),
+            angularaxis=dict(
+                direction='clockwise',
+                period=6
+            ),
+        ),
         title=radar_chart_title
     )
 

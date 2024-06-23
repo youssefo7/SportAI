@@ -7,9 +7,10 @@ register_page(__name__, "/")
 # Initialize the Preprocessor singleton instance for data preprocessing
 preprocessor = Preprocessor()
 
-# Fetch processed team statistics and goal distribution data
+# Fetch processed team statistics, goal distribution data and normalized metrics for radar chart
 team_stats = preprocessor.get_processed_data()
 goal_dist = preprocessor.get_goal_distribution_df()
+radar_data = preprocessor.get_normalized_radar_data(team_stats)
 
 layout = html.Div([
     # Introduction section
@@ -83,7 +84,7 @@ def render_parallel_coordinates_plot(selected_team):
 @callback(Output('radar-chart', 'figure'),
         [Input('team-dropdown', 'value'), Input('team-dropdown-compare', 'value')])
 def render_radar_chart(selected_team, selected_team_to_compare):
-    return create_radar_chart(team_stats, selected_team, selected_team_to_compare)
+    return create_radar_chart(radar_data, selected_team, selected_team_to_compare)
 
 @callback(Output('goal_dist_bar_chart', 'figure'),
               [Input('team-dropdown', 'value')])
