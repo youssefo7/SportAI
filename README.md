@@ -24,12 +24,17 @@ pip install Flask plotly pandas openpyxl
 
 ```
 SportsAI/
-    .venv/
-    static/
-        EURO_2020_DATA.xlsx
-    templates/
-        index.html
-    app.py
+   .venv/
+   src/
+      pages/
+         home.py
+      services/
+         graph.py
+         preprocess.py
+      static/
+         EURO_2020_DATA.xlsx
+      app.py
+   requirements.txt
 ```
 
 ### How to Run
@@ -53,6 +58,7 @@ SportsAI/
 
 4. **Run the Flask app:**
    ```bash
+   cd src
    python app.py
    ```
 

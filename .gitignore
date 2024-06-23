@@ -1,7 +1,7 @@
-### Flask template
 instance/*
 !instance/.gitignore
 .webassets-cache
+.vscode/
 .env
 .venv/
 __pycache__/

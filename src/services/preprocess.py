@@ -6,6 +6,8 @@ class Preprocessor:
 
     def __new__(cls, file_path=None):
         if cls.instance is None:
+            if file_path is None:
+                raise Exception("File path is required to instantiate Preprocessor")
             cls.instance = super(Preprocessor, cls).__new__(cls)
         return cls.instance
     
@@ -105,3 +107,4 @@ class Preprocessor:
         goal_distribution_df = goal_distribution_df[['First Half', 'Second Half', 'Overtime']]
 
         return goal_distribution_df
+    

@@ -1,10 +1,9 @@
 from dash import html, dcc, Input, Output, register_page, callback
-from service.graphs import create_defensive_3d_scatter_plot, create_offensive_3d_scatter_plot, create_parallel_coordinates_plot, create_goal_dist_bar_chart, create_radar_chart
-from service.preprocess import Preprocessor
-from service.stateManager import StateManager
+from services.graphs import create_defensive_3d_scatter_plot, create_offensive_3d_scatter_plot, create_parallel_coordinates_plot, create_goal_dist_bar_chart, create_radar_chart
+from services.preprocess import Preprocessor
+
 register_page(__name__, "/")
 
-state_manager = StateManager()
 preprocessor = Preprocessor()
 
 team_stats = preprocessor.get_processed_data()
@@ -18,7 +17,7 @@ layout = html.Div([
     dcc.Dropdown(
         id='team-dropdown',
         options=[{'label': team, 'value': team} for team in team_stats['TeamName'].unique()],
-        value='Italy',
+        value=team_stats['TeamName'].iloc[0],
         style={'width': "100%", 'margin-bottom': '3%'},
         searchable=False,
         clearable=False
@@ -45,7 +44,6 @@ layout = html.Div([
     html.Div([
         dcc.Dropdown(
             id='team-dropdown-compare',
-            options=[{'label': team, 'value': team} for team in team_stats['TeamName'].unique()],
             value='',
             placeholder='Select a team to compare (optional)',
             style={'width': '100%'}
@@ -81,6 +79,11 @@ def render_radar_chart(selected_team, selected_team_to_compare):
               [Input('team-dropdown', 'value')])
 def render_goal_dist_bar_chart(selected_team):
     return create_goal_dist_bar_chart(goal_dist, selected_team)
+
+@callback(Output('team-dropdown-compare', 'options'),
+            [Input('team-dropdown', 'value')])
+def update_team_dropdown(selected_team):
+    return [{'label': team, 'value': team} for team in team_stats['TeamName'].unique() if team != selected_team]
 
 @callback(Output('intro', 'children'),
           [Input('intro', 'children')])
