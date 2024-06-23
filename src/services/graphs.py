@@ -1,7 +1,7 @@
 import plotly.express as px
 import plotly.graph_objects as go
 
-def create_offensive_3d_scatter_plot(merged_data):
+def create_offensive_3d_scatter_plot(merged_data,selected_team):
     """
     Creates a 3D scatter plot showing offensive performance metrics of teams.
 
@@ -11,18 +11,37 @@ def create_offensive_3d_scatter_plot(merged_data):
     Returns:
     plotly.graph_objs._figure.Figure: Plotly figure object.
     """
+    team_data = merged_data[merged_data['TeamName'] == selected_team]
+    other_teams_data = merged_data[merged_data['TeamName'] != selected_team]
+    
     fig = px.scatter_3d(
-        merged_data,
+        other_teams_data,
         x='Goals',
         y='Ball Possession',
         z='Total Attempts',
         color='TeamName',
+        color_discrete_sequence=['gray'],
         title='UEFA Euro 2020 Team Offensive Performance in 3D',
-        labels={'Goals': 'Goals Scored', 'Ball Possession': 'Ball Possession (%)', 'Total Attempts': 'Total Shots'}
+        labels={'Goals': 'Goals Scored', 'Ball Possession': 'Ball Possession (%)', 'Total Attempts': 'Total Shots'},
+        opacity=0.6,
+        hover_name='TeamName',
+        hover_data={'Goals': True, 'Ball Possession': True, 'Total Attempts': True, 'TeamName': False}
     )
+    fig.add_trace(px.scatter_3d(
+        team_data,
+        x='Goals',
+        y='Ball Possession',
+        z='Total Attempts',
+        color_discrete_sequence=['red'],
+        color='TeamName',
+        opacity=0.9,
+        hover_name='TeamName',
+        hover_data={'Goals': True, 'Ball Possession': True, 'Total Attempts': True, 'TeamName': False},
+    ).data[0])
+
     return fig
 
-def create_defensive_3d_scatter_plot(merged_data):
+def create_defensive_3d_scatter_plot(merged_data,selected_team):
     """
     Creates a 3D scatter plot showing defensive performance metrics of teams.
 
@@ -32,15 +51,34 @@ def create_defensive_3d_scatter_plot(merged_data):
     Returns:
     plotly.graph_objs._figure.Figure: Plotly figure object.
     """
+    team_data = merged_data[merged_data['TeamName'] == selected_team]
+    other_teams_data = merged_data[merged_data['TeamName'] != selected_team]
+
     fig = px.scatter_3d(
-        merged_data,
+        other_teams_data,
         x='Fouls committed',
         y='Tackles',
         z='Saves',
+        color_discrete_sequence=['gray'],
         color='TeamName',
         title='UEFA Euro 2020 Team Defensive Performance in 3D',
-        labels={'Fouls committed': 'Fouls Committed', 'Tackles': 'Tackles Won', 'Saves': 'Saves'}
+        labels={'Fouls committed': 'Fouls Committed', 'Tackles': 'Tackles Won', 'Saves': 'Saves'},
+        opacity=0.6,
+        hover_name='TeamName',
+        hover_data={'Fouls committed': True, 'Tackles': True, 'Saves': True, 'TeamName': False}  
     )
+    fig.add_trace(px.scatter_3d(
+        team_data,
+        x='Fouls committed',
+        y='Tackles',
+        z='Saves',
+        color_discrete_sequence=['red'],
+        color='TeamName',
+        opacity=0.9,
+        hover_name='TeamName', 
+        hover_data={'Fouls committed': True, 'Tackles': True, 'Saves': True, 'TeamName': False} 
+    ).data[0]) 
+    
     return fig
 
 def create_parallel_coordinates_plot(merged_data,selected_team):
