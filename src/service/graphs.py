@@ -27,12 +27,13 @@ def create_defensive_3d_scatter_plot(merged_data):
     return fig
 
 def create_parallel_coordinates_plot(merged_data,selected_team):
+     line_colors = dict(color=merged_data['Goals'] , colorscale='Tealrose')
+     
+     if selected_team and selected_team in merged_data['TeamName'].values:
+        colors = [ 1 if team == selected_team else 0 for team in merged_data['TeamName']]
+        line_colors=dict(color=colors, colorscale=[[0, 'gray'], [1, 'red']])
     
-    
-    colors = [ 1 if team == selected_team else 0 for team in merged_data['TeamName']]
-    line_colors=dict(color=colors, colorscale=[[0, 'gray'], [1, 'red']])
-    
-    parallel_fig = go.Figure(data=go.Parcoords(
+     parallel_fig = go.Figure(data=go.Parcoords(
         line=line_colors,
         dimensions=[
             dict(range=[merged_data['Ball Possession'].min(), merged_data['Ball Possession'].max()],
@@ -54,7 +55,7 @@ def create_parallel_coordinates_plot(merged_data,selected_team):
         ],
         ids=merged_data.index,
     ))
-    parallel_fig.update_layout(
+     parallel_fig.update_layout(
         title="UEFA Euro 2020 Team Performance: Parallel Coordinates",
         font=dict(size=12),
         paper_bgcolor='white',
@@ -62,7 +63,7 @@ def create_parallel_coordinates_plot(merged_data,selected_team):
         hovermode='closest'
     )
 
-    return parallel_fig
+     return parallel_fig
 
 def create_goal_dist_bar_chart(data, team):
      team = str(team).strip()
